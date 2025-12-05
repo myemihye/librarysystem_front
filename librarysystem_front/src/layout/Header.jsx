@@ -4,9 +4,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
-import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +14,8 @@ const SearchBox = styled("div")(() => ({
   position: "relative",
   borderRadius: 8,
   backgroundColor: "#f1f3f5",
-  width: "100%", // 화면에 따라 자동 확장
+  width: "100%",
+  maxWidth: "800px",
   display: "flex",
   alignItems: "center",
   padding: "6px 14px",
@@ -35,24 +35,34 @@ export default function Header() {
         borderBottom: "1px solid #e5e5e5",
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* 로고 영역 */}
+      <Toolbar
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* 로고 */}
         <Box
           sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
           onClick={() => navigate("/")}
         >
-          {/* <img
-            src="/logo.svg" // 로고 파일 있으면 교체해도 됨
-            alt="logo"
-            style={{ width: 28, marginRight: 8 }}
-          /> */}
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             BookShelf
           </Typography>
         </Box>
 
-        {/* 오른쪽: 검색창 + 프로필 */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+        {/* 오른쪽 영역: 검색창 + 버튼들 */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 3,
+            flex: 1,
+            justifyContent: "flex-end",
+            ml: 4, // ⭐ 로고와 검색창 사이 여유 간격
+          }}
+        >
           {/* 검색창 */}
           <SearchBox>
             <SearchIcon fontSize="small" sx={{ color: "#868e96", mr: 1 }} />
@@ -62,16 +72,37 @@ export default function Header() {
             />
           </SearchBox>
 
-          {/* 프로필 */}
-          <IconButton>
-            <Avatar
-              sx={{
-                width: 36,
-                height: 36,
-              }}
-              src="/profile.png" // 사용자 이미지 있으면 교체
-            />
-          </IconButton>
+          {/* 로그인 버튼 */}
+          <Button
+            variant="text"
+            sx={{
+              color: "#1f2937",
+              fontWeight: 600,
+              whiteSpace: "nowrap", // 줄바꿈 방지
+              flexShrink: 0, // 버튼 자체가 쪼그라들지 않게
+            }}
+            onClick={() => navigate("/login")}
+          >
+            로그인
+          </Button>
+
+          {/* 회원가입 버튼 */}
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#3b82f6",
+              borderRadius: "20px",
+              px: 2.5,
+              py: 0.8,
+              fontWeight: 600,
+              whiteSpace: "nowrap", // ⭐ 글자 줄바꿈 방지
+              minWidth: 96, // ⭐ 최소 너비 고정 (대략 '회원가입'이 딱 맞는 정도)
+              flexShrink: 0, // ⭐ 화면 줄어들어도 버튼 크기 유지
+            }}
+            onClick={() => navigate("/signup")}
+          >
+            회원가입
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>
