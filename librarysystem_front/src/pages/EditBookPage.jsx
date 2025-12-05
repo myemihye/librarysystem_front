@@ -1,165 +1,199 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Grid
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function EditBookPage() {
+// ========================================================================
+// 📌 DetailBookPage
+// - 도서 상세 정보를 조회하고 대출 / 반납 기능을 제공하는 페이지
+// - 지금은 Dummy 데이터를 기반으로 동작
+// - 나중에 API를 쉽게 붙일 수 있도록 구조를 API-friendly하게 구성
+// ========================================================================
+
+export default function DetailBookPage() {
   const navigate = useNavigate();
   const { book_id } = useParams();
 
-  const dummyBook = {
-    book_id,
-    title: "예시 도서 제목",
-    author: "홍길동",
-    summary: "원래 저장된 책 요약입니다.",
-    imageUrl: "",
+  // ========================================================================
+  // 📌 도서 상세 정보 state (API Response 구조 그대로)
+  // GET /books/{bookId} 응답 형태에 맞춤
+  // ========================================================================
+  const [book, setBook] = useState({
+    bookId: book_id,
+    title: "",
+    author: "",
+    summary: "",
+    coverImageUrl: "",
+    stockCount: 0,        // 전체 재고
+    availableStock: 0,    // 대출 가능 재고
+  });
+
+  // rentalId는 대출 성공 시 서버에서 받아옴
+  const [rentalId, setRentalId] = useState(null);
+
+  // ========================================================================
+  // 📌 Dummy 데이터 로드 (실제 API 호출 부분)
+  // ========================================================================
+  useEffect(() => {
+    // 🔵 Dummy Data 로 테스트
+    const dummyDetail = {
+      bookId: book_id,
+      title: "예시 도서 제목",
+      author: "홍길동",
+      summary: "이 책은 도서 상세 페이지 테스트용 더미 요약입니다.",
+      coverImageUrl: "https://via.placeholder.com/200x260?text=Cover",
+      stockCount: 5,
+      availableStock: 3,
+    };
+
+    setBook(dummyDetail);
+
+    // 🟢 실제 API 연결 시
+    /*
+    const res = await getBookById(book_id);
+    setBook(res.data);
+    */
+  }, [book_id]);
+
+  // ========================================================================
+  // 📌 대출하기 (POST /rentals)
+  // ========================================================================
+  const handleRent = async () => {
+    // 🔵 dummy test
+    setRentalId(123);          // 가짜 rentalId 생성
+    setBook(prev => ({
+      ...prev,
+      availableStock: prev.availableStock - 1,
+    }));
+
+    // 🟢 실제 API
+    /*
+    const res = await rentBook(book.bookId);
+    setRentalId(res.data.rentalId);
+    setBook(prev => ({
+      ...prev,
+      availableStock: prev.availableStock - 1
+    }));
+    */
   };
 
-  const [title, setTitle] = useState(dummyBook.title);
-  const [author, setAuthor] = useState(dummyBook.author);
-  const [summary, setSummary] = useState(dummyBook.summary);
-  const [imageUrl, setImageUrl] = useState(dummyBook.imageUrl);
+  // ========================================================================
+  // 📌 반납하기 (PATCH /rentals/{rentalId}/return)
+  // ========================================================================
+  const handleReturn = async () => {
+    // 🔵 dummy test
+    setRentalId(null);
+    setBook(prev => ({
+      ...prev,
+      availableStock: prev.availableStock + 1,
+    }));
 
-  // 🔥 더 이상 state로 관리하지 않음 → 오류 제거됨
-  const isImageStale = summary !== dummyBook.summary;
-
-  const handleSave = () => {
-    console.log("수정된 데이터:", {
-      title,
-      author,
-      summary,
-      imageUrl,
-    });
-
-    navigate(`/book/${book_id}`);
-  };
-
-  const handleRegenerateImage = () => {
-    alert("AI 이미지 재생성을 실행합니다 (테스트용).");
-    setImageUrl("https://via.placeholder.com/300x200.png?text=New+AI+Image");
-  };
-
-  const styles = {
-    container: {
-      maxWidth: "700px",
-      margin: "0 auto",
-      display: "flex",
-      flexDirection: "column",
-      gap: "20px",
-    },
-    input: {
-      padding: "10px",
-      fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-    },
-    textarea: {
-      padding: "10px",
-      height: "120px",
-      fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-      resize: "none",
-    },
-    imageBox: {
-      width: "100%",
-      height: "250px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#f3f3f3",
-      color: "#666",
-      fontSize: "18px",
-    },
-    regenerateBtn: {
-      padding: "10px",
-      backgroundColor: "#0d6efd",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "15px",
-    },
-    saveBtn: {
-      padding: "12px",
-      backgroundColor: "#198754",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "16px",
-    },
-    backBtn: {
-      padding: "10px",
-      backgroundColor: "#ddd",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "15px",
-    },
-    warning: {
-      color: "red",
-      fontSize: "14px",
-      fontWeight: "bold",
-    },
+    // 🟢 실제 API
+    /*
+    await returnRental(rentalId);
+    setRentalId(null);
+    setBook(prev => ({
+      ...prev,
+      availableStock: prev.availableStock + 1
+    }));
+    */
   };
 
   return (
-    <div style={styles.container}>
-      <h2>✏️ 도서 수정</h2>
+    <Box maxWidth="750px" mx="auto" display="flex" flexDirection="column" gap={3}>
+      <Typography variant="h5">📖 도서 상세 정보</Typography>
 
-      <input
-        type="text"
-        style={styles.input}
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="책 제목"
-      />
+      {/* 표지 이미지 */}
+      <Paper
+        variant="outlined"
+        sx={{
+          height: 260,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={book.coverImageUrl}
+          style={{ width: "100%", height: "100%", borderRadius: 6 }}
+        />
+      </Paper>
 
-      <input
-        type="text"
-        style={styles.input}
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        placeholder="저자"
-      />
+      {/* 제목 */}
+      <Paper variant="outlined" sx={{ p: 2 }}>
+        <Typography fontWeight="bold">책 제목</Typography>
+        <Typography>{book.title}</Typography>
+      </Paper>
 
-      <textarea
-        style={styles.textarea}
-        value={summary}
-        onChange={(e) => setSummary(e.target.value)}
-        placeholder="책 요약"
-      />
+      {/* 저자 */}
+      <Paper variant="outlined" sx={{ p: 2 }}>
+        <Typography fontWeight="bold">저자</Typography>
+        <Typography>{book.author}</Typography>
+      </Paper>
 
-      <div style={styles.imageBox}>
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="AI 이미지"
-            style={{ width: "100%", height: "100%", borderRadius: "6px" }}
-          />
-        ) : (
-          "AI 이미지가 아직 생성되지 않았습니다"
-        )}
-      </div>
+      {/* 요약 */}
+      <Paper variant="outlined" sx={{ p: 2 }}>
+        <Typography fontWeight="bold">책 요약</Typography>
+        <Typography>{book.summary}</Typography>
+      </Paper>
 
-      {isImageStale && (
-        <div style={styles.warning}>
-          요약이 변경되었습니다. 이미지를 다시 생성해야 합니다.
-        </div>
-      )}
+      {/* 재고 */}
+      <Paper variant="outlined" sx={{ p: 2 }}>
+        <Typography fontWeight="bold">재고 현황</Typography>
+        <Typography>전체 재고: {book.stockCount}</Typography>
+        <Typography>대출 가능: {book.availableStock}</Typography>
+      </Paper>
 
-      <button style={styles.regenerateBtn} onClick={handleRegenerateImage}>
-        AI 이미지 재생성
-      </button>
+      {/* 버튼 그룹 */}
+      <Grid container spacing={2}>
+        {/* 수정 */}
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            onClick={() => navigate(`/book/${book_id}/edit`)}
+          >
+            도서 수정
+          </Button>
+        </Grid>
 
-      <button style={styles.saveBtn} onClick={handleSave}>
-        수정 완료
-      </button>
+        {/* 대출 */}
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            color="success"
+            fullWidth
+            disabled={book.availableStock === 0 || rentalId !== null}
+            onClick={handleRent}
+          >
+            대출
+          </Button>
+        </Grid>
 
-      <button style={styles.backBtn} onClick={() => navigate(-1)}>
+        {/* 반납 */}
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            disabled={rentalId === null}
+            onClick={handleReturn}
+          >
+            반납
+          </Button>
+        </Grid>
+      </Grid>
+
+      {/* 뒤로가기 */}
+      <Button variant="text" onClick={() => navigate(-1)}>
         뒤로가기
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }

@@ -1,123 +1,195 @@
 import React, { useState } from "react";
+import {
+  Box,
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  Grid,
+} from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
+
+// ========================================================================
+// 📌 NewBookPage: 새로운 도서를 추가하는 화면
+// - 지금은 dummy data 로 테스트 가능
+// - 나중에 API 연결을 쉽게 하기 위해 구조를 API-friendly하게 설계함
+// ========================================================================
 
 export default function NewBookPage() {
   const navigate = useNavigate();
 
+  // ----------------------
+  // 📌 API 요청 Body 형태 그대로 state 구성
+  //     { title, author, summary, coverImageUrl }
+  // ----------------------
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [summary, setSummary] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState(null); // 최종 선택한 이미지
 
-  const styles = {
-    container: {
-      maxWidth: "600px",
-      margin: "0 auto",
-      display: "flex",
-      flexDirection: "column",
-      gap: "20px",
-    },
-    input: {
-      padding: "10px",
-      fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-    },
-    textarea: {
-      padding: "10px",
-      height: "120px",
-      fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-      resize: "none",
-    },
-    imageBox: {
-      width: "100%",
-      height: "200px",
-      border: "1px dashed #aaa",
-      borderRadius: "6px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#666",
-      backgroundColor: "#fafafa",
-    },
-    buttonWrap: {
-      display: "flex",
-      gap: "10px",
-    },
-    buttonPrimary: {
-      flex: 1,
-      padding: "12px",
-      backgroundColor: "#007bff",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      fontSize: "16px",
-      cursor: "pointer",
-    },
-    buttonSecondary: {
-      flex: 1,
-      padding: "12px",
-      backgroundColor: "#555",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      fontSize: "16px",
-      cursor: "pointer",
-    },
-    buttonBack: {
-      width: "100%",
-      padding: "10px",
-      backgroundColor: "#ddd",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "15px",
-    },
+  // AI 이미지 후보 (dummy or API response)
+  const [aiImages, setAiImages] = useState([]); // ["url1", "url2", ...]
+  const [loading, setLoading] = useState(false);
+
+  // ========================================================================
+  // 📌 1) AI 이미지 생성 버튼
+  //     → 지금은 dummy 이미지로 테스트
+  //     → 실제 API 연결 시 아래 주석 구간만 수정하면 된다.
+  // ========================================================================
+  const handleGenerateAICover = async () => {
+    setLoading(true);
+
+    // -----------------------------------------
+    // 🔵 TEST용 dummy (실제 API 없이 프론트만 테스트)
+    // -----------------------------------------
+    setTimeout(() => {
+      setAiImages([
+        "https://via.placeholder.com/200x260?text=AI+Cover+1",
+        "https://via.placeholder.com/200x260?text=AI+Cover+2",
+        "https://via.placeholder.com/200x260?text=AI+Cover+3",
+        "https://via.placeholder.com/200x260?text=AI+Cover+4",
+      ]);
+      setLoading(false);
+    }, 800);
+
+    // -----------------------------------------
+    // 🟢 추후 실제 API 연동 시 (axios 예시)
+    // -----------------------------------------
+    /*
+    const res = await generateAICover({
+      title: title,
+      summary: summary,
+      style: "default"
+    });
+    setAiImages(res.data.candidates);  // 4개의 이미지 URL
+    */
+  };
+
+  // ========================================================================
+  // 📌 2) 도서 등록 버튼
+  //     → 지금은 console.log + navigate("/")
+  //     → 실제 API 연결 시 createBook(payload)로 전송
+  // ========================================================================
+  const handleCreateBook = async () => {
+    const payload = {
+      title,
+      author,
+      summary,
+      coverImageUrl,
+    };
+
+    console.log("📌 등록 요청 데이터:", payload);
+
+    // -----------------------------------------
+    // 🟢 추후 실제 API 연동 시
+    // -----------------------------------------
+    /*
+    await createBook(payload);
+    navigate("/");
+    */
+
+    // 테스트용 이동
+    navigate("/");
   };
 
   return (
-    <div style={styles.container}>
-      <h2>📘 새로운 도서 추가</h2>
+    <Box
+      maxWidth="750px"
+      mx="auto"
+      display="flex"
+      flexDirection="column"
+      gap={3}
+    >
+      <Typography variant="h5">📘 새로운 도서 추가</Typography>
 
-      <input
-        type="text"
-        placeholder="책 제목"
-        style={styles.input}
+      {/* ---------------------------------- */}
+      {/*  책 제목 input */}
+      {/* ---------------------------------- */}
+      <TextField
+        label="책 제목"
+        fullWidth
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <input
-        type="text"
-        placeholder="저자"
-        style={styles.input}
+      {/* ---------------------------------- */}
+      {/*  저자 input */}
+      {/* ---------------------------------- */}
+      <TextField
+        label="저자"
+        fullWidth
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       />
 
-      <textarea
-        placeholder="책 요약을 입력하세요..."
-        style={styles.textarea}
+      {/* ---------------------------------- */}
+      {/*  책 요약 input */}
+      {/* ---------------------------------- */}
+      <TextField
+        label="책 요약"
+        fullWidth
+        multiline
+        rows={4}
         value={summary}
         onChange={(e) => setSummary(e.target.value)}
       />
 
-      <div style={styles.imageBox}>AI 생성 이미지 미리보기</div>
+      {/* ---------------------------------- */}
+      {/* AI 이미지 후보 미리보기 */}
+      {/* ---------------------------------- */}
+      {aiImages.length > 0 && (
+        <Grid container spacing={2}>
+          {aiImages.map((img, idx) => (
+            <Grid item xs={3} key={idx}>
+              <Paper
+                onClick={() => setCoverImageUrl(img)}
+                sx={{
+                  border:
+                    coverImageUrl === img
+                      ? "3px solid #1976d2"
+                      : "1px solid #ccc",
+                  cursor: "pointer",
+                  p: 1,
+                }}
+              >
+                <img src={img} width="100%" />
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
-      <div style={styles.buttonWrap}>
-        <button style={styles.buttonSecondary}>AI 이미지 생성</button>
-        <button style={styles.buttonPrimary}>도서 등록</button>
-      </div>
+      {/* ---------------------------------- */}
+      {/* 버튼 영역 */}
+      {/* ---------------------------------- */}
 
-      <button style={styles.buttonBack} onClick={() => navigate(-1)}>
+      <Box display="flex" gap={2}>
+        <Button
+          variant="outlined"
+          fullWidth
+          onClick={handleGenerateAICover}
+          disabled={loading}
+        >
+          {loading ? "이미지 생성 중..." : "AI 이미지 생성"}
+        </Button>
+
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={!coverImageUrl}
+          onClick={handleCreateBook}
+        >
+          도서 등록
+        </Button>
+      </Box>
+
+      {/* ---------------------------------- */}
+      {/* 뒤로가기 */}
+      {/* ---------------------------------- */}
+      <Button variant="text" fullWidth onClick={() => navigate(-1)}>
         뒤로가기
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }
-
-// export default function NewBookPage() {
-//   return <h2> NewBookPage</h2>;
-// }
-
