@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Grid, TextField, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Grid } from "@mui/material";
 import BookCard from "../books/BookCard";
 
 // 테스트용 목업 데이터
-
 const MOCK_BOOKS = [
     {
         id: 1,
@@ -34,16 +33,7 @@ export default function MaunPage() {
       {/* 🖼️ 도서 목록 그리드 구현 (MUI Grid 핵심) */}
       <Grid container spacing={3}>
         {books.map((book) => (
-          <Grid
-            item
-            key={book.id}
-            // 🚨 반응형 레이아웃 설정 (12 컬럼 시스템 기반)
-            // 화면이 커질수록 한 줄에 더 많은 카드를 배치합니다.
-            lg={2} // Large (12/2 = 6개 카드/줄)
-            md={3} // Medium (12/3 = 4개 카드/줄)
-            sm={4} // Small (12/4 = 3개 카드/줄)
-            xs={6} // Extra Small (12/6 = 2개 카드/줄)
-          >
+          <Grid key={book.id}>
             {/* 개별 아이템 컴포넌트 */}
             <BookCard book={book} />
           </Grid>
