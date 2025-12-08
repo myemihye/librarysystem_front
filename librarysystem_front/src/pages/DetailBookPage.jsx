@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Paper, Typography, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";  // 📌 삭제 API 호출용
 
 export default function DetailBookPage() {
   const navigate = useNavigate();
@@ -16,12 +17,32 @@ export default function DetailBookPage() {
 
   const [status, setStatus] = useState("대출 가능");
 
+  // ======================================================
+  // 📌 도서 삭제 기능 추가
+  // ======================================================
+  const handleDeleteBook = async () => {
+    const ok = window.confirm("정말 삭제하시겠습니까?");
+    if (!ok) return;
+
+    try {
+      await axios.delete(`/api/books/delete/${book_id}`);
+      alert("도서가 삭제되었습니다.");
+      navigate("/"); // 삭제 후 목록으로 이동
+    } catch (err) {
+      console.error(err);
+      alert("삭제 중 문제가 발생했습니다.");
+    }
+  };
+
   return (
     <Box maxWidth="700px" mx="auto" display="flex" flexDirection="column" gap={3}>
       <Typography variant="h5">📖 도서 상세 정보</Typography>
 
       {/* 이미지 */}
-      <Paper variant="outlined" sx={{ height: 250, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Paper
+        variant="outlined"
+        sx={{ height: 250, display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
         <Typography color="text.secondary">AI 생성 이미지 미리보기</Typography>
       </Paper>
 
@@ -75,6 +96,18 @@ export default function DetailBookPage() {
           반납
         </Button>
       </Box>
+
+      {/* ===================================== */}
+      {/* 📌 삭제 버튼 추가 */}
+      {/* ===================================== */}
+      <Button
+        variant="contained"
+        color="error"
+        fullWidth
+        onClick={handleDeleteBook}
+      >
+        도서 삭제
+      </Button>
 
       <Button variant="text" onClick={() => navigate(-1)}>
         뒤로가기

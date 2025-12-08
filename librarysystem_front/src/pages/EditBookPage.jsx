@@ -1,3 +1,4 @@
+//도서 수정 
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -28,7 +29,7 @@ export default function DetailBookPage() {
     title: "",
     author: "",
     summary: "",
-    coverImageUrl: "",
+    coverImageUrl: "", // 이미지 url
     stockCount: 0,        // 전체 재고
     availableStock: 0,    // 대출 가능 재고
   });
