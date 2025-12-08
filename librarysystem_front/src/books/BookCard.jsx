@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, Typography, Button, Box } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
 function BookCard({ book }) {
@@ -7,14 +7,10 @@ function BookCard({ book }) {
   const { id, title, author, coverUrl, status } = book;
 
   const isRented = status === '대출 중';
-  const buttonColor = isRented ? 'error' : 'primary';
-  const buttonText = isRented ? '대출 중' : '대출';
 
   return (
-      /* 25.12.05 심미혜
-         북카드 클릭시 상세페이지 이동 추가*/
     <Card
-      onClick={() => navigate(`/book/${id}`)}  // 👈 상세페이지로 이동
+      onClick={() => navigate(`/book/${id}`)}
       sx={{
         width: '200px',
         height: '300px',
@@ -22,11 +18,11 @@ function BookCard({ book }) {
         flexDirection: 'column',
         boxShadow: 2,
         transition: '0.3s',
-        cursor: 'pointer',                 // 👈 클릭 가능 표시
+        cursor: 'pointer',
+        p: 1.5,
         '&:hover': { boxShadow: 6 }
       }}
     >
-      {/* 1. 책 표지 이미지 */}
       <CardMedia
         component="img"
         image={coverUrl}
@@ -34,12 +30,10 @@ function BookCard({ book }) {
         sx={{ p: 1.5, pb: 0 }}
       />
 
-      {/* 2. 도서 상세 정보 */}
       <CardContent sx={{ flexGrow: 1, p: 1.5, pb: 0 }}>
         <Typography
           variant="subtitle1"
           fontWeight="bold"
-          component="div"
           noWrap
           title={title}
         >
@@ -54,37 +48,26 @@ function BookCard({ book }) {
           <Typography
             variant="caption"
             color="error"
-            display="block"
-            mt={0.5}
             fontWeight="bold"
+            mt={0.5}
+            display="block"
           >
             대출 중
           </Typography>
         )}
       </CardContent>
 
-      {/* 3. 대출 버튼 */}
-      <Box sx={{ position: 'relative' }}>
-        <Button
-          variant="contained"
-          color={buttonColor}
-          size="small"
+      {/* 👇 버튼 대신 상태 텍스트 표시 */}
+      <Box sx={{ width: '100%', textAlign: 'right' }} >
+        <Typography
+          variant="caption"
+          fontWeight="bold"
           sx={{
-            position: 'absolute',
-            bottom: 10,
-            right: 10,
-            fontWeight: 'bold',
-            minWidth: 'auto',
-            ...(isRented && {
-              backgroundColor: '#757575',
-              color: 'white',
-              '&:hover': { backgroundColor: '#757575' }
-            })
+            color: isRented ? 'error.main' : 'primary.main'
           }}
-          disabled={isRented}
         >
-          {buttonText}
-        </Button>
+          {isRented ? '대출 중' : '대출 가능'}
+        </Typography>
       </Box>
     </Card>
   );
