@@ -1,4 +1,6 @@
 // src/pages/SignupPage.jsx
+// 회원가입 페이지
+
 import React from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";

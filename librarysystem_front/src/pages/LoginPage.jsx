@@ -1,4 +1,6 @@
 // src/pages/LoginPage.jsx
+// 로그인 페이지
+
 import React from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +10,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: 여기서 추후 로그인 API 호출 예정
+    // TODO: 추후 로그인 API 연동
   };
 
   return (
@@ -43,13 +45,16 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
         >
+          {/* 회원번호 */}
           <TextField
-            label="이메일"
+            label="회원번호"
             variant="outlined"
             size="small"
             fullWidth
-            placeholder="이메일을 입력하세요"
+            placeholder="회원번호를 입력하세요"
           />
+
+          {/* 비밀번호 */}
           <TextField
             label="비밀번호"
             type="password"
@@ -71,7 +76,7 @@ export default function LoginPage() {
           </Button>
         </Box>
 
-        {/* 회원가입으로 이동 */}
+        {/* 회원가입 이동 */}
         <Typography
           variant="body2"
           align="center"
