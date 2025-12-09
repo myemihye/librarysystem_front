@@ -43,7 +43,7 @@ export default function MainPage() {
     loadBooks();
   }, [keyword, page, sort]); // ✔ sort 추가
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (value) => {
     setPage(value);
   };
 
@@ -69,7 +69,7 @@ export default function MainPage() {
       ) : (
         <Grid container spacing={3}>
           {books.map((book) => (
-            <Grid item xs={12} sm={6} md={4} key={book.id}>
+            <Grid key={book.bookNo}>
               <BookCard book={book} />
             </Grid>
           ))}

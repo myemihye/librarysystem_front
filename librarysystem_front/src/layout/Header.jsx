@@ -26,7 +26,7 @@ const SearchBox = styled("div")(() => ({
 
 export default function Header() {
   const navigate = useNavigate();
-  const { setKeyword } = useSearch();
+  const { keyword, setKeyword } = useSearch();
 
   // ⭐ 로그인 여부 상태
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,7 +34,7 @@ export default function Header() {
   // 처음 마운트될 때 localStorage에 토큰 있는지 확인
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token);
+    setIsLoggedIn(token);
   }, []);
 
   // 로그아웃 핸들러
@@ -92,6 +92,7 @@ export default function Header() {
             <InputBase
               placeholder="검색"
               sx={{ width: "100%", fontSize: 14 }}
+              value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
           </SearchBox>

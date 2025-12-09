@@ -102,7 +102,7 @@ export default function NewBookPage() {
       {aiImages.length > 0 && (
         <Grid container spacing={2}>
           {aiImages.map((img, idx) => (
-            <Grid item xs={3} key={idx}>
+            <Grid key={idx}>
               <Paper
                 onClick={() => setCoverImageUrl(img)}
                 sx={{
