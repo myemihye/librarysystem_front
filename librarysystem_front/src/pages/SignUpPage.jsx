@@ -154,6 +154,20 @@ export default function SignupPage() {
         >
           이미 계정이 있으신가요? 로그인
         </Typography>
+
+        {/* 메인으로 이동 */}
+        <Button
+          variant="body2"
+          size="small"
+          sx={{
+            mt: 1,
+            display: "block",
+            mx: "auto",
+          }}
+          onClick={() => navigate("/")}
+        >
+          메인으로 이동
+        </Button>
       </Paper>
     </Box>
   );

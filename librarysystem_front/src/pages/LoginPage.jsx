@@ -106,7 +106,20 @@ export default function LoginPage() {
           회원가입
         </Typography>
 
-        {/* 관리자 로그인 이동 버튼 */}
+        {/* 메인으로 이동 */}
+        <Button
+          variant="body2"
+          size="small"
+          sx={{
+            mt: 1,
+            display: "block",
+            mx: "auto",
+          }}
+          onClick={() => navigate("/")}
+        >
+          메인으로 이동
+        </Button>
+        {/* 관리자 로그인 이동 */}
         <Button
           variant="text"
           size="small"
