@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Slidebar() {
+export default function Sidebar() {
   const sidebarStyle = {
     display: "flex",
     flexDirection: "column",
@@ -20,8 +20,10 @@ export default function Slidebar() {
     padding: "8px 0",
   };
 
-  // 🔐 관리자 로그인 여부 확인
-  const accessToken = localStorage.getItem("accessToken");
+  // 🔐 관리자 여부 확인 (로그인 시 localStorage에 저장된 role 사용)
+  const role = localStorage.getItem("role"); // 예: "ADMIN" 또는 null
+
+  const isAdmin = role === "ADMIN";
 
   return (
     <div style={sidebarStyle}>
@@ -29,8 +31,8 @@ export default function Slidebar() {
         도서목록
       </Link>
 
-      {/* ⭐ accessToken 존재할 때만 도서 추가 버튼 보여주기 */}
-      {accessToken && (
+      {/* ⭐ 관리자일 때만 도서 추가 버튼 노출 */}
+      {isAdmin && (
         <Link to="/add-book" style={linkStyle}>
           도서 추가
         </Link>
