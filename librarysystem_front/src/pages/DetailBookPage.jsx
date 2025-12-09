@@ -144,7 +144,7 @@ export default function DetailBookPage() {
         fontWeight="bold"
         sx={{ fontSize: "18px", textAlign: "center" }}
       >
-        {book.stockcount === 1 ? "대출 가능" : "대출 불가"}
+        {book.isLoaned ? "대출 가능" : "대출 불가"}
       </Typography>
 
       {/* =======================
@@ -156,7 +156,7 @@ export default function DetailBookPage() {
             fullWidth
             variant="contained"
             color="success"
-            disabled={book.stockcount === 0 || loading}
+            disabled={!book.isLoaned}
             onClick={handleRent}
           >
             대출
@@ -182,7 +182,7 @@ export default function DetailBookPage() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate(`/edit-book/${bookId}`)}
+          onClick={() => navigate(`/book/${bookId}/edit`)}
         >
           수정하기
         </Button>

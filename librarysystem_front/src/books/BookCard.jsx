@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 function BookCard({ book }) {
   const navigate = useNavigate();
-  const { bookNo, title, author, coverImageUrl, status } = book;
+  const { bookNo, title, author, coverImageUrl, isLoaned } = book;
 
-  const isRented = status === '대출 중';
+  const isRented = isLoaned === '대출 불가';
 
   return (
     <Card
@@ -52,7 +52,7 @@ function BookCard({ book }) {
             mt={0.5}
             display="block"
           >
-            대출 중
+            대출 불가
           </Typography>
         )}
       </CardContent>
@@ -66,7 +66,7 @@ function BookCard({ book }) {
             color: isRented ? 'error.main' : 'primary.main'
           }}
         >
-          {isRented ? '대출 중' : '대출 가능'}
+          {isRented ? '대출 불가' : '대출 가능'}
         </Typography>
       </Box>
     </Card>
