@@ -101,18 +101,12 @@ export async function deleteBook(bookId) {
 
 // ======================= AI 이미지 생성 =======================
 
-// AI 이미지 생성 POST /api/images/generate
-// Body: { prompt, n?, size? }  (명세에 n, size는 안 넣어도 된다고 적혀 있음)
-// Res 성공: { data: [ { url: "..." }, ... ] }
-//   실패: { errorMessage: "이미지가 생성되지 않았습니다." }
-export async function generateBookImage(prompt, options = {}) {
-  const { n = 1, size = "1024x1024" } = options;
-  const res = await api.post("/api/images/generate", {
-    prompt,
-    n,
-    size,
-  });
-  return res.data;
+// FE는 prompt만 보내고, 백엔드는 저장된 이미지 URL만 반환
+// Body: { prompt }
+// Res: { imageUrl: "/img/book/1/cover.png" }
+export async function generateBookImage(prompt) {
+  const res = await api.post("/api/cover", { prompt });
+  return res.data; // { imageUrl }
 }
 
 // ======================= 대여/반납 Rentals & Loans =======================
