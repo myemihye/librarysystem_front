@@ -52,6 +52,7 @@ export async function adminLogin(employeeId, password) {
 
 // ======================= 도서/Books =======================
 
+
 // 도서 조회
 // Query: ?page=1&sort=latest  (정의서 예시)
 // Res: { count, books: [ { bookId, title, ..., coverImageUrl, ... }, ... ] }
@@ -79,26 +80,24 @@ export async function fetchBookById(bookId) {
 }
 
 // 도서 등록 (관리자) POST /admin/books
-// Body: { title, author, publisher, genre, tag, coverImageUrl, price, registrationDate }
+// Body: { title, author, publisher, genre, tag, coverImageUrl, price, description }
 export async function createBook(bookData) {
   const res = await api.post("/admin/books", bookData);
-  return res.data;
+  return res.data; // { id: 생성된ID, msg: "등록완료" }
 }
 
-// 도서 수정 (관리자) UPDATE /api/books/update/{bookId}
-// Body: 도서 수정 내용 전체
-// Method가 UPDATE로 써있는데, 보통 PUT 또는 PATCH 중 하나일 것 → 일단 PUT으로 가정
+// 도서 수정 (관리자) PATCH /admin/books/{bookId}
+// Body: 도서 수정 전체 필드 patch로 수정
 export async function updateBook(bookId, updateData) {
-  const res = await api.put(`/api/books/update/${bookId}`, updateData);
-  return res.data;
+  const res = await api.patch(`/admin/books/${bookId}`, updateData);
+  return res.data; // { id: bookId, msg: "수정완료" }
 }
 
-// 도서 삭제 (관리자) DELETE /api/books/delete/{bookId}
+// 도서 삭제 (관리자) DELETE /admin/books/{bookId}
 export async function deleteBook(bookId) {
-  const res = await api.delete(`/api/books/delete/${bookId}`);
-  return res.data;
+  const res = await api.delete(`/admin/books/${bookId}`);
+  return res.data; // { id: bookId, msg: "삭제완료" }
 }
-
 // ======================= AI 이미지 생성 =======================
 
 // Body: { title, prompt }
