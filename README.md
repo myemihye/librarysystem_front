@@ -12,6 +12,7 @@ API 통신	Custom Service (bookService.js)
 
 
 📁 프로젝트 구조
+```
 librarysystem_front-main/
 └── librarysystem_front/
     ├── index.html
@@ -49,7 +50,7 @@ librarysystem_front-main/
         │
         └── services/
             └── bookService.js
-
+```
 
 🧩 주요 기능 소개
 
