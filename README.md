@@ -201,6 +201,7 @@ generateBookImage({ title, prompt })
 - returnRental(rentalId)
 
 7. 페이지별 역할
+
 7.1. MainPage.jsx
 
 도서 목록 조회
