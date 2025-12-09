@@ -2,12 +2,11 @@
 import React, { useState } from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { signup } from "../services/bookService"; // ⭐ 회원가입 API
+import { signup } from "../services/bookService";
 
 export default function SignupPage() {
   const navigate = useNavigate();
 
-  // 폼 입력값 상태
   const [name, setName] = useState("");
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +17,6 @@ export default function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 간단 필수값 체크
     if (!name || !memberId || !password || !phone || !address) {
       alert("모든 항목을 입력해 주세요.");
       return;
@@ -27,7 +25,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
 
-      // ✅ API 정의서에 맞게 호출
+      // bookService.signup은 res.data를 그대로 리턴한다고 가정
       const res = await signup({
         memberId,
         password,
@@ -36,14 +34,9 @@ export default function SignupPage() {
         address,
       });
 
-      // 정의서: { "status": 201, "msg": "가입완료" }
-      if (res?.status === 201) {
-        alert(res.msg || "회원가입이 완료되었습니다.");
-        navigate("/login");
-      } else {
-        // 혹시 status 형식이 달라도 최소한 메시지는 보여주기
-        alert(res?.msg || "회원가입 처리 결과를 확인할 수 없습니다.");
-      }
+      // ✅ 메시지 띄우고 → 바로 로그인 페이지로 이동
+      alert(res?.msg || "회원가입이 완료되었습니다.");
+      navigate("/login");
     } catch (error) {
       console.error("회원가입 실패:", error);
       alert("회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
@@ -157,7 +150,7 @@ export default function SignupPage() {
 
         {/* 메인으로 이동 */}
         <Button
-          variant="body2"
+          variant="text"
           size="small"
           sx={{
             mt: 1,
